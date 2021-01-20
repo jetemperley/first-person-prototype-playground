@@ -17,7 +17,7 @@ public class Move : MonoBehaviour {
     }
 
     void FixedUpdate () {
-        moveWithVel ();
+        moveSimple ();
         if (feetOnGroundFlag 
         && Input.GetAxisRaw ("Horizontal") == 0 
         && Input.GetAxisRaw ("Vertical") == 0){

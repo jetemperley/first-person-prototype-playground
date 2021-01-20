@@ -140,6 +140,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b974d9e45c57ec045b8d5f6bd5f6191d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  launch: {fileID: 3326237041786655987}
 --- !u!1 &3326237041786655757
 GameObject:
   m_ObjectHideFlags: 0
@@ -154,8 +155,9 @@ GameObject:
   - component: {fileID: 3326237041786655987}
   - component: {fileID: 3326237041786655986}
   - component: {fileID: 9209800551684338240}
+  - component: {fileID: 8161336284237483032}
   m_Layer: 0
-  m_Name: FPC
+  m_Name: FPC 1
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -211,7 +213,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   rb: {fileID: 3326237041786655759}
-  accel: 0.15
+  accel: 2
   grabRatio: 2
   maxSpeed: 5
   speedIncFac: 1
@@ -259,11 +261,26 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 3a8f274dc6dd3c346a4d724bb78f8877, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  cam: {fileID: 3326237040539677205}
-  handsItem: {fileID: 0}
-  handsAnchor: {fileID: 4149212523642564670}
-  scaleFactor: 0.2
+  handsItemL: {fileID: 0}
+  handsItemR: {fileID: 0}
+  handsAnchorL: {fileID: 4149212523642564670}
+  handsAnchorR: {fileID: 7212912927844950417}
+  scaleFactor: 1
   backPack: {fileID: 0}
+  backPackAnchor: {fileID: 3482997182410439030}
+--- !u!114 &8161336284237483032
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3326237041786655757}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d0063bd26f97c79488354799de841c7c, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  cam: {fileID: 3326237040539677205}
 --- !u!1 &3326237042238248165
 GameObject:
   m_ObjectHideFlags: 0

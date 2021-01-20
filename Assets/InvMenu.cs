@@ -41,7 +41,8 @@ public class InvMenu : MonoBehaviour {
 
     void setupInv () {
 
-        buildPlayerHands (player.GetComponent<InvPlayer> ());
+        buildPlayerHandsL (player.GetComponent<InvPlayer> ());
+        buildPlayerHandsR (player.GetComponent<InvPlayer> ());
         buildPlayerBag (player.GetComponent<InvPlayer> ());
 
     }
@@ -178,7 +179,7 @@ public class InvMenu : MonoBehaviour {
             } else if (putIn == null) { // else drop on the floor
                 Debug.Log ("dropping");
                 GameObject g = takeFrom.remove (prevLoc[0], prevLoc[1]);
-                g.transform.position = player.GetComponent<InvPlayer> ().handsAnchor.transform.position;
+                g.transform.position = player.GetComponent<InvPlayer> ().handsAnchorL.transform.position;
                 Destroy (itemTrans.gameObject, 0.02f);
 
             } else { // or drop on the floor
@@ -213,9 +214,9 @@ public class InvMenu : MonoBehaviour {
         }
     }
 
-    GameObject buildPlayerHands (InvPlayer inv) {
+    GameObject buildPlayerHandsL (InvPlayer inv) {
         GameObject[, ] bag = new GameObject[1, 1];
-        string name = "Hands";
+        string name = "L Hand";
 
         // make a mainpanel here
         GameObject mainPanel = makeMainPanel (1, 1, gameObject);
@@ -224,7 +225,7 @@ public class InvMenu : MonoBehaviour {
         GameObject gridHolder = ui.makeBlankPanel (0, -handleHeight, bag.GetLength (0) * gridSize, bag.GetLength (1) * gridSize, mainPanel);
         handsGridHolder = gridHolder;
         gridHolder.name = "Grid Holder";
-        GridPlayerHandsHolder gph = gridHolder.AddComponent<GridPlayerHandsHolder> ();
+        GridPlayerHandsHolderL gph = gridHolder.AddComponent<GridPlayerHandsHolderL> ();
         gph.p = player.GetComponent<InvPlayer> ();
         gph.color = new Color (0, 0, 0, 0);
 
@@ -232,7 +233,33 @@ public class InvMenu : MonoBehaviour {
         GameObject handle = makeMoveHandle (bag, name, mainPanel);
         handle.GetComponent<RectTransform> ().sizeDelta = new Vector2 (mainPanel.GetComponent<RectTransform> ().sizeDelta.x, handleHeight);
         // build all the items in the contents
-        GameObject obj = inv.handsItem;
+        GameObject obj = inv.handsItemL;
+        if (obj != null)
+            buildItem (obj, gridHolder);
+
+        return mainPanel;
+    }
+
+    GameObject buildPlayerHandsR (InvPlayer inv) {
+        GameObject[, ] bag = new GameObject[1, 1];
+        string name = "R Hand";
+
+        // make a mainpanel here
+        GameObject mainPanel = makeMainPanel (1, 1, gameObject);
+        mainPanel.name = "HandsPanel";
+
+        GameObject gridHolder = ui.makeBlankPanel (0, -handleHeight, bag.GetLength (0) * gridSize, bag.GetLength (1) * gridSize, mainPanel);
+        handsGridHolder = gridHolder;
+        gridHolder.name = "Grid Holder";
+        GridPlayerHandsHolderR gph = gridHolder.AddComponent<GridPlayerHandsHolderR> ();
+        gph.p = player.GetComponent<InvPlayer> ();
+        gph.color = new Color (0, 0, 0, 0);
+
+        makeGrid (bag.GetLength (0), bag.GetLength (1), gridHolder);
+        GameObject handle = makeMoveHandle (bag, name, mainPanel);
+        handle.GetComponent<RectTransform> ().sizeDelta = new Vector2 (mainPanel.GetComponent<RectTransform> ().sizeDelta.x, handleHeight);
+        // build all the items in the contents
+        GameObject obj = inv.handsItemR;
         if (obj != null)
             buildItem (obj, gridHolder);
 
@@ -459,22 +486,42 @@ public class InvMenu : MonoBehaviour {
 
     }
 
-    public class GridPlayerHandsHolder : Image, GridHolder {
+    public class GridPlayerHandsHolderL : Image, GridHolder {
         public InvPlayer p;
         public bool add (GameObject g, int x, int y) {
-            return p.addToHands (g);
+            return p.addToHandsL (g);
         }
         public GameObject remove (int x, int y) {
 
-            return p.removeFromHands ();
+            return p.removeFromHandsL ();
         }
         public GameObject get (int x, int y) {
-            return p.handsItem;
+            return p.handsItemL;
         }
         public bool canFit (GameObject g, int x, int y) {
             if (g == null)
                 return false;
-            return p.handsItem == null;
+            return p.handsItemL == null;
+        }
+
+    }
+
+    public class GridPlayerHandsHolderR : Image, GridHolder {
+        public InvPlayer p;
+        public bool add (GameObject g, int x, int y) {
+            return p.addToHandsR (g);
+        }
+        public GameObject remove (int x, int y) {
+
+            return p.removeFromHandsR ();
+        }
+        public GameObject get (int x, int y) {
+            return p.handsItemR;
+        }
+        public bool canFit (GameObject g, int x, int y) {
+            if (g == null)
+                return false;
+            return p.handsItemR == null;
         }
 
     }

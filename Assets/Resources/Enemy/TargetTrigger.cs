@@ -9,7 +9,9 @@ public class TargetTrigger : MonoBehaviour {
         triggers the enemy targeting
     */
     public Enemy enemy;
-    // Start is called before the first frame update
+    Ray ray;
+    RaycastHit hit;
+
     void Start () { }
 
     // Update is called once per frame
@@ -20,11 +22,26 @@ public class TargetTrigger : MonoBehaviour {
     void OnTriggerStay (Collider c) {
 
         Vector3 t = c.gameObject.transform.position;
-        if (enemy.canSee (c.gameObject)){
+        if (canSee (c.gameObject)) {
             enemy.setTarget (t);
             // Debug.Log("targeting player");
             return;
         }
 
+    }
+
+    public bool canSee (GameObject g) {
+        Vector3 direction = (g.transform.position - transform.position).normalized;
+        ray = new Ray (transform.position, direction);
+        int mask = (1 << 8);
+        mask = mask | 1;
+        if (Physics.Raycast (ray, out hit, 100f, mask) && hit.collider.gameObject == g) {
+            return true;
+        }
+
+        if (hit.collider != null) {
+            Debug.Log ($"checking if see {g.name}, failed hit, hit {hit.collider.gameObject}");
+        }
+        return false;
     }
 }

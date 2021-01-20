@@ -16,8 +16,10 @@ public class PlayerInteraction : MonoBehaviour {
     void Update () {
         // Debug.Log("" + Input.mousePosition.z);
         if (Input.GetKeyDown (KeyCode.E)) {
+            Debug.Log("pressed E");
             ray = new Ray (cam.transform.position, cam.transform.forward);
             if (Physics.Raycast (ray, out hit) && hit.distance < 4) {
+                Debug.Log($"Raycast hit {hit.collider.gameObject.name}");
                 use (hit.collider.gameObject);
 
             }
@@ -27,13 +29,18 @@ public class PlayerInteraction : MonoBehaviour {
 
     void use (GameObject g) {
        
+        Debug.Log("using item");
         InvObj io = g.GetComponent<InvObj> ();
         Usable use = g.GetComponent<Usable> ();
+        Debug.Log($"io null {io == null}");
         if (io != null) {
-            inv.addToHands (io.gameObject);
+            Debug.Log("adding to hands");
+            inv.addToHandsL (g);
         } else if (use != null){
              // Debug.Log("using " + g.name);
             use.use();
         }
     }
+
+    
 }
