@@ -5,7 +5,6 @@ using UnityEngine;
 // attaches to a player that can hold and pickup inventory items
 public class InvPlayer : MonoBehaviour {
 
-
     public GameObject handsItemL = null;
     public GameObject handsItemR = null;
     public GameObject handsAnchorL;
@@ -27,27 +26,7 @@ public class InvPlayer : MonoBehaviour {
         if (handsItemL == null) {
             //Debug.Log("not null");
             handsItemL = g;
-            // handsItemL.GetComponent<Rigidbody> ().isKinematic = true;
-            //handsItemL.GetComponent<Collider> ().enabled = false;
-            handsItemL.transform.parent = handsAnchorL.transform;
-
-            handsItemL.transform.localRotation = handsAnchorL.transform.localRotation;
-            handsItemL.transform.position = handsAnchorL.transform.position;
-            handsItemL.transform.localPosition = handsItemL.transform.localPosition + new Vector3 (0, 0, 0.1f);
-
-            handsItemL.transform.localScale = new Vector3 (scaleFactor, scaleFactor, scaleFactor);
-            // ConfigurableJoint fj = g.AddComponent<ConfigurableJoint>();
-            // fj.xMotion = ConfigurableJointMotion.Locked;
-            // fj.yMotion = ConfigurableJointMotion.Locked;
-            // fj.zMotion = ConfigurableJointMotion.Locked;
-            // JointDrive jd = fj.angularXDrive;
-            // jd.positionSpring = 20f;
-            // jd.positionDamper = -10f;
-            // fj.angularXDrive = jd;
-            // fj.angularYZDrive = jd;
-            FixedJoint fj = g.AddComponent<FixedJoint>();
-            fj.connectedBody = handsAnchorL.GetComponent<Rigidbody>();
-            g.layer = 11;;
+            addToHand(handsAnchorL, handsItemL);
             return true;
         }
         return false;
@@ -57,59 +36,100 @@ public class InvPlayer : MonoBehaviour {
         if (handsItemR == null) {
             //Debug.Log("not null");
             handsItemR = g;
-            // handsItemR.GetComponent<Rigidbody> ().isKinematic = true;
-            //handsItemR.GetComponent<Collider> ().enabled = false;
-            handsItemR.transform.parent = handsAnchorR.transform;
 
-            handsItemR.transform.localRotation = handsAnchorR.transform.localRotation;
-            handsItemR.transform.position = handsAnchorR.transform.position;
-            handsItemR.transform.localPosition = handsItemR.transform.localPosition + new Vector3 (0, 0, 0.1f);
-
-            handsItemR.transform.localScale = new Vector3 (scaleFactor, scaleFactor, scaleFactor);
-            // ConfigurableJoint fj = g.AddComponent<ConfigurableJoint>();
-            // fj.xMotion = ConfigurableJointMotion.Locked;
-            // fj.yMotion = ConfigurableJointMotion.Locked;
-            // fj.zMotion = ConfigurableJointMotion.Locked;
-            // JointDrive jd = fj.angularXDrive;
-            // jd.positionSpring = 20f;
-            // jd.positionDamper = -10f;
-            // fj.angularXDrive = jd;
-            // fj.angularYZDrive = jd;
-            FixedJoint fj = g.AddComponent<FixedJoint>();
-            fj.connectedBody = handsAnchorR.GetComponent<Rigidbody>();
-            
-            g.layer = 11;
+            addToHand (handsAnchorR, handsItemR);
             return true;
         }
         return false;
     }
 
-    public GameObject removeFromHandsL () {
-        handsItemL.GetComponent<Rigidbody> ().isKinematic = false;
-        handsItemL.GetComponent<Collider> ().enabled = true;
-        handsItemL.transform.parent = null;
+    void addToHand (GameObject handAnchor, GameObject handItem) {
+        handItem.layer = 11;
 
-        handsItemL.transform.localScale = new Vector3 (1, 1, 1);
-        GameObject g = handsItemL;
+        // Rigidbody rb = handItem.GetComponent<Rigidbody>();
+        // Rigidbody rbh = handAnchor.GetComponent<Rigidbody>();
+        // rbh.mass = rbh.mass + rb.mass;
+        // Destroy(rb, 0.001f);
+        // handItem.transform.position = handAnchor.transform.position;
+        // handItem.transform.rotation = handAnchor.transform.rotation;
+        
+        // handItem.transform.parent = handAnchor.transform;
+        
+        
+
+
+        // rb.freezeRotation = true;
+        // handItem.transform.localRotation =  handItem.transform.localRotation*Quaternion.Euler(45, 0, 0);
+
+        // handsItemR.GetComponent<Rigidbody> ().isKinematic = true;
+        //handsItemR.GetComponent<Collider> ().enabled = false;
+
+        // move and parent the object to the hand
+        
+        // handItem.transform.localRotation = handAnchor.transform.localRotation;
+        // handItem.transform.position = handsAnchorR.transform.position;
+        // handItem.transform.localPosition = handItem.transform.localPosition + new Vector3 (0, 0, 0.1f);
+        // handItem.transform.localScale = new Vector3 (scaleFactor, scaleFactor, scaleFactor);
+
+        // ConfigurableJoint fj = handItem.AddComponent<ConfigurableJoint>();
+        // JointDrive jd = fj.angularXDrive;
+        // jd.positionSpring = 0;
+        // jd.positionDamper = 0;
+        // fj.angularXDrive = jd;
+        // fj.angularYZDrive = jd;
+        // ConfigurableJoint fj = handItem.AddComponent<ConfigurableJoint> ();
+        // fj.connectedBody = handAnchor.GetComponent<Rigidbody>();
+        
+        // fj.xMotion = ConfigurableJointMotion.Locked;
+        // fj.yMotion = ConfigurableJointMotion.Locked;
+        // fj.zMotion = ConfigurableJointMotion.Locked;
+        // fj.angularXMotion = ConfigurableJointMotion.Locked;
+        // fj.angularYMotion = ConfigurableJointMotion.Locked;
+        // fj.angularZMotion = ConfigurableJointMotion.Locked;
+
+        // move the hand item rigidbody to the hand and add a fixed joint??? no parenting?
+        handItem.transform.position = handAnchor.transform.position;
+        handItem.transform.rotation = gameObject.transform.rotation;
+        FixedJoint fj = handItem.AddComponent<FixedJoint>();
+        // fj.connectedBody = handAnchor.GetComponent<Rigidbody>();
+        fj.connectedBody = gameObject.GetComponent<Rigidbody>();
+        fj.massScale = handItem.GetComponent<Rigidbody> ().mass;
+
+
+        
+
+    }
+
+    public GameObject removeFromHandsL () {
+        GameObject g = removeFromHand(handsItemL, handsAnchorL);
         handsItemL = null;
-        FixedJoint fj = g.GetComponent<FixedJoint>();
-        if (fj != null)
-            Destroy(fj, 0.05f);
-        g.layer = 1;
-        return g;
+        return  g;
     }
 
     public GameObject removeFromHandsR () {
-        handsItemR.GetComponent<Rigidbody> ().isKinematic = false;
-        handsItemR.GetComponent<Collider> ().enabled = true;
-        handsItemR.transform.parent = null;
-
-        handsItemR.transform.localScale = new Vector3 (1, 1, 1);
-        GameObject g = handsItemR;
+        GameObject g = removeFromHand(handsItemR, handsAnchorR);
         handsItemR = null;
-        FixedJoint fj = g.GetComponent<FixedJoint>();
+        return  g;
+    }
+
+    GameObject removeFromHand(GameObject handItem, GameObject hand){
+        // handItem.GetComponent<Rigidbody> ().isKinematic = false;
+        handItem.GetComponent<Collider> ().enabled = true;
+        handItem.transform.parent = null;
+
+        // Rigidbody rb = handItem.AddComponent<Rigidbody>();
+        // rb.freezeRotation = false;
+        // rb.useGravity = true;
+        // Rigidbody rbh = hand.GetComponent<Rigidbody>();
+        // rb.mass = rbh.mass-1;
+        // rbh.mass = 1;
+
+        handItem.transform.localScale = new Vector3 (1, 1, 1);
+        GameObject g = handItem;
+        handItem = null;
+        FixedJoint fj = g.GetComponent<FixedJoint> ();
         if (fj != null)
-            Destroy(fj, 0.05f);
+            Destroy (fj, 0.05f);
 
         g.layer = 1;
         return g;
@@ -147,8 +167,8 @@ public class InvPlayer : MonoBehaviour {
         return null;
     }
 
-    public bool canFitBag(GameObject g){
-        InvContainer ic = g.GetComponent<InvContainer>();
+    public bool canFitBag (GameObject g) {
+        InvContainer ic = g.GetComponent<InvContainer> ();
         return ic != null && ic.isBackPack && backPack == null;
     }
 }

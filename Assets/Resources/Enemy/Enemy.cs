@@ -10,6 +10,7 @@ public class Enemy : MonoBehaviour {
     Rigidbody rb;
     GameObject lat; // obj to hold WS loc transform to look at
     float timer = 0;
+    List<GameObject> flock;
 
 
     void Start () {
@@ -19,6 +20,7 @@ public class Enemy : MonoBehaviour {
         lat = new GameObject ();
         // GameObject.CreatePrimitive(PrimitiveType.Sphere);
         setTarget (target);
+        flock = new List<GameObject>();
         // lat.SetActive(true);
     }
 
@@ -41,6 +43,7 @@ public class Enemy : MonoBehaviour {
         }
         moveToTarget (target, speedFac);
         timer += Time.fixedDeltaTime;
+        updateFlock();
     }
 
     void moveToTarget (Vector3 tgt, float dist) {
@@ -54,11 +57,11 @@ public class Enemy : MonoBehaviour {
             // rb.MovePosition (transform.position + (tgt.normalized * dist));
             // Vector3 v = tgt.normalized;
             // rb.AddForce(v.x, v.y, v.z);
-            transform.position = (transform.position + (tgt.normalized * dist));
+            rb.MovePosition(transform.position + (tgt.normalized * dist));
             
         } else {
             // rb.MovePosition (transform.position + tgt);
-            transform.position = (transform.position + (tgt.normalized * dist));
+            rb.MovePosition(transform.position + (tgt.normalized * dist));
             
         }
 
@@ -81,5 +84,29 @@ public class Enemy : MonoBehaviour {
         target = new Vector3 (t.x, gameObject.transform.position.y, t.z);
         lookAt (target);
         timer = 0;
+    }
+
+    void OnCollisionEnter(Collision c){
+        if (c.collider.gameObject.CompareTag("Enemy")){
+            GameObject g = c.collider.gameObject.transform.parent.gameObject;
+            if (!flock.Contains(g)){
+                flock.Add(g);
+            }
+        }
+    }
+
+    void updateFlock(){
+        for (int i = 0; i < flock.Count; i++){
+            GameObject g = flock[i];
+            Vector3 v = g.transform.position -transform.position;
+            float d = v.sqrMagnitude;
+            if (d > 20){
+                flock.RemoveAt(i);
+                i--;
+            } else if (d < 10){
+                rb.AddForce(-v.normalized*(20/d));
+            }
+
+        }
     }
 }

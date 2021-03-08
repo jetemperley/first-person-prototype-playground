@@ -17,7 +17,7 @@ public class Move : MonoBehaviour {
     }
 
     void FixedUpdate () {
-        moveSimple ();
+        moveWithPosition ();
         if (feetOnGroundFlag 
         && Input.GetAxisRaw ("Horizontal") == 0 
         && Input.GetAxisRaw ("Vertical") == 0){
@@ -127,11 +127,7 @@ public class Move : MonoBehaviour {
 
     }
 
-    void moveSimple(){
-        dir.y = Input.GetAxis("Vertical") * maxSpeed * Time.fixedDeltaTime;
-        dir.x = Input.GetAxis("Horizontal") * maxSpeed * Time.fixedDeltaTime;
-        transform.Translate(dir.x, 0, dir.y);
-    }
+    
 
     // void simpleMove () {
     //     accelFactor = accel * Time.fixedDeltaTime;

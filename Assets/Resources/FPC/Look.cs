@@ -9,10 +9,11 @@ public class Look : MonoBehaviour {
     public Transform camera;
     float flickTime = 0, flickWaitTime = 200;
     public static bool enabled = true;
+    Rigidbody rb;
 
     void Start () {
         Cursor.lockState = CursorLockMode.Locked;
-
+        rb = gameObject.GetComponent<Rigidbody>();
     }
 
     void Update () {
@@ -20,7 +21,8 @@ public class Look : MonoBehaviour {
             x = Input.GetAxis ("Mouse X") * sensitivity;
             y = Input.GetAxis ("Mouse Y") * sensitivity;
 
-            transform.Rotate (0, x, 0, Space.Self);
+            //rb.MoveRotation (rb.rotation*Quaternion.Euler(0, x, 0));
+            transform.rotation =  transform.rotation*Quaternion.Euler(0, x, 0);
             Vector3 angles = camera.localEulerAngles;
             // Debug.Log("x " + angles.x);
             
